@@ -43,7 +43,9 @@ enum custom_keycodes
 {
   KC_MY_BTN1 = KEYBALL_SAFE_RANGE, // Remap上では 0x5DAF
   KC_MY_BTN2,                      // Remap上では 0x5DB0
-  KC_MY_BTN3                       // Remap上では 0x5DB1
+  KC_MY_BTN3,                      // Remap上では 0x5DB1
+  KC_MY_BTN4,
+  KC_MY_BTN5
 };
 
 
