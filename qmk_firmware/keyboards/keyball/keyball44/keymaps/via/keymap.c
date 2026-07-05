@@ -17,8 +17,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
-
 #include "quantum.h"
+
+// コード表
+// 【KBC_RST: 0x5DA5】Keyball 設定のリセット
+// 【KBC_SAVE: 0x5DA6】現在の Keyball 設定を EEPROM に保存します
+// 【CPI_I100: 0x5DA7】CPI を 100 増加させます(最大:12000)
+// 【CPI_D100: 0x5DA8】CPI を 100 減少させます(最小:100)
+// 【CPI_I1K: 0x5DA9】CPI を 1000 増加させます(最大:12000)
+// 【CPI_D1K: 0x5DAA】CPI を 1000 減少させます(最小:100)
+// 【SCRL_TO: 0x5DAB】タップごとにスクロールモードの ON/OFF を切り替えます
+// 【SCRL_MO: 0x5DAC】キーを押している間、スクロールモードになります
+// 【SCRL_DVI: 0x5DAD】スクロール除数を１つ上げます(max D7 = 1/128)← 最もスクロール遅い
+// 【SCRL_DVD: 0x5DAE】スクロール除数を１つ下げます(min D0 = 1/1)← 最もスクロール速い
 
 ////////////////////////////////////
 ///
@@ -30,13 +41,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 enum custom_keycodes
 {
-  KC_MY_BTN1 = KEYBALL_SAFE_RANGE, // Remap上では 0x5DAF
-  KC_MY_BTN2,                      // Remap上では 0x5DB0
-  KC_MY_BTN3,                       // Remap上では 0x5DB1
-  KC_MY_BTN4,                       // Remap上では 0x5DB2
-  KC_MY_BTN5                        // Remap上では 0x5DB3
+  KC_MY_BTN1 = KEYBALL_SAFE_RANGE, // Remap上では 0x5DAF
+  KC_MY_BTN2,                      // Remap上では 0x5DB0
+  KC_MY_BTN3                       // Remap上では 0x5DB1
 };
-
 
 enum click_state
 {
@@ -110,8 +118,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
   case KC_MY_BTN1:
   case KC_MY_BTN2:
   case KC_MY_BTN3:
-  case KC_MY_BTN4:
-  case KC_MY_BTN5:
   {
     report_mouse_t currentReport = pointing_device_get_report();
 
@@ -221,21 +227,20 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report)
 ///
 ////////////////////////////////////
 
-
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  // keymap for default (VIA)
+  // keymap for default
   [0] = LAYOUT_universal(
     KC_ESC   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_DEL   ,
     KC_TAB   , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , S(KC_7)  ,
     KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , KC_INT1  ,
-              KC_LALT,KC_LGUI,LCTL_T(KC_LNG2)     ,LT(1,KC_SPC),LT(3,KC_LNG1),                  KC_BSPC,LT(2,KC_ENT), RCTL_T(KC_LNG2),     KC_RALT  , KC_PSCR
+              KC_LALT,KC_LGUI,LCTL_T(KC_LANG2)     ,LT(1,KC_SPC),LT(3,KC_LANG1),                  KC_BSPC,LT(2,KC_ENT), RCTL_T(KC_LANG2),     KC_RALT  , KC_PSCR
   ),
 
   [1] = LAYOUT_universal(
-    SSNP_FRE ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                         KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
-    SSNP_VRT ,  _______ , _______  , KC_UP   , KC_ENT   , KC_DEL   ,                                         KC_PGUP  , KC_BTN1  , KC_UP    , KC_BTN2  , KC_BTN3  , KC_F12   ,
-    SSNP_HOR ,  _______ , KC_LEFT  , KC_DOWN , KC_RGHT  , KC_BSPC  ,                                         KC_PGDN  , KC_LEFT  , KC_DOWN  , KC_RGHT  , _______  , _______  ,
+    _______  ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                         KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
+    _______  ,  _______ , _______  , KC_UP   , KC_ENT   , KC_DEL   ,                                         KC_PGUP  , KC_BTN1  , KC_UP    , KC_BTN2  , KC_BTN3  , KC_F12   ,
+    _______  ,  _______ , KC_LEFT  , KC_DOWN , KC_RGHT  , KC_BSPC  ,                                         KC_PGDN  , KC_LEFT  , KC_DOWN  , KC_RGHT  , _______  , _______  ,
                   _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),
 
@@ -247,19 +252,34 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [3] = LAYOUT_universal(
-    RGB_TOG  , AML_TO   , AML_I50  , AML_D50  , _______  , _______  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
+    RGB_TOG  , _______  , _______  , _______  , _______  , _______  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
     RGB_MOD  , RGB_HUI  , RGB_SAI  , RGB_VAI  , _______  , SCRL_DVI ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
     RGB_RMOD , RGB_HUD  , RGB_SAD  , RGB_VAD  , _______  , SCRL_DVD ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
-                  QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
+                  RESET    , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , RESET
   ),
+
+  [4] = LAYOUT_universal(
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
+                  _______  , _______  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
+  ),
+
+  [5] = LAYOUT_universal(
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
+                  _______  , _______  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
+  ),
+
+  [6] = LAYOUT_universal(
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_MY_BTN1, _______  ,KC_MY_BTN2, _______  , _______  ,
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
+                  _______  , _______  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
+  )
 };
 // clang-format on
-
-layer_state_t layer_state_set_user(layer_state_t state) {
-    // Auto enable scroll mode when the highest layer is 3
-    keyball_set_scroll_mode(get_highest_layer(state) == 3);
-    return state;
-}
 
 layer_state_t layer_state_set_user(layer_state_t state)
 {
@@ -284,13 +304,14 @@ layer_state_t layer_state_set_user(layer_state_t state)
 
 #ifdef OLED_ENABLE
 
-#    include "lib/oledkit/oledkit.h"
+#include "lib/oledkit/oledkit.h"
 
-void oledkit_render_info_user(void) {
-    keyball_oled_render_keyinfo();
-    keyball_oled_render_ballinfo();
-    keyball_oled_render_layerinfo();
+void oledkit_render_info_user(void)
+{
+  keyball_oled_render_keyinfo();
+  keyball_oled_render_ballinfo();
+
+  oled_write_P(PSTR("Layer:"), false);
+  oled_write(get_u8_str(get_highest_layer(layer_state), ' '), false);
 }
 #endif
-
-
