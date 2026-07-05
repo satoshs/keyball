@@ -41,11 +41,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 enum custom_keycodes
 {
-  KC_MY_BTN1 = KEYBALL_SAFE_RANGE, // Remap上では 0x5DAF
-  KC_MY_BTN2,                      // Remap上では 0x5DB0
-  KC_MY_BTN3,                      // Remap上では 0x5DB1
-  KC_MY_BTN4,
-  KC_MY_BTN5
+  KC_BTN1 = KEYBALL_SAFE_RANGE, // Remap上では 0x5DAF
+  KC_BTN2,                      // Remap上では 0x5DB0
+  KC_BTN3,                      // Remap上では 0x5DB1
+  KC_BTN4,
+  KC_BTN5
 };
 
 
@@ -118,11 +118,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 
   switch (keycode)
   {
-  case KC_MY_BTN1:
-  case KC_MY_BTN2:
-  case KC_MY_BTN3:
-  case KC_MY_BTN4:
-  case KC_MY_BTN5:
+  case KC_BTN1:
+  case KC_BTN2:
+  case KC_BTN3:
+  case KC_BTN4:
+  case KC_BTN5:
   {
     report_mouse_t currentReport = pointing_device_get_report();
 
@@ -263,8 +263,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
   ),
   [4] = LAYOUT_universal(
-    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_MY_BTN4 , _______  ,KC_MY_BTN5, _______  , _______  ,
-    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_MY_BTN1,KC_MY_BTN3  ,KC_MY_BTN2, _______  , _______  ,
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_BTN4 , _______  ,KC_BTN5, _______  , _______  ,
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_BTN1,KC_BTN3  ,KC_BTN2, _______  , _______  ,
     _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
                   _______  , _______  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   )
