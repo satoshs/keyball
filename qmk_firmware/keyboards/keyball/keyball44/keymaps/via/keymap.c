@@ -373,7 +373,23 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
 /// miniZoneの実装 ここまで ///
 ////////////////////////////
 
-// clang-format off
+#ifdef OLED_ENABLE
+
+#    include "lib/oledkit/oledkit.h"
+
+void oledkit_render_info_user(void) {
+    keyball_oled_render_keyinfo();
+    keyball_oled_render_ballinfo();
+    
+    oled_write_P(PSTR("Layer:"), false);
+    oled_write(get_u8_str(get_highest_layer(layer_state), ' '), false);
+    oled_write_P(PSTR(" MV:"), false);
+    oled_write(get_u8_str(mouse_movement, ' '), false);
+    oled_write_P(PSTR("/"), false);
+    oled_write(get_u8_str(user_config.to_clickable_movement, ' '), false);
+}
+#endif
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     LAYOUT_universal(
@@ -426,21 +442,3 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
   
 };
-// clang-format on
-
-layer_state_t layer_state_set_user(layer_state_t state) {
-    // Auto enable scroll mode when the highest layer is 3
-    keyball_set_scroll_mode(get_highest_layer(state) == 3);
-    return state;
-}
-
-#ifdef OLED_ENABLE
-
-#    include "lib/oledkit/oledkit.h"
-
-void oledkit_render_info_user(void) {
-    keyball_oled_render_keyinfo();
-    keyball_oled_render_ballinfo();
-    keyball_oled_render_layerinfo();
-}
-#endif
