@@ -39,6 +39,8 @@ enum custom_keycodes {
     KC_MY_BTN1 = SAFE_RANGE,
     KC_MY_BTN2,
     KC_MY_BTN3,
+    KC_MY_BTN4,
+    KC_MY_BTN5,
     KC_MY_SCR,
     KC_TO_CLICKABLE_INC,
     KC_TO_CLICKABLE_DEC,
@@ -146,6 +148,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_MY_BTN1:
         case KC_MY_BTN2:
         case KC_MY_BTN3:
+        case KC_MY_BTN4:
+        case KC_MY_BTN5:
         {
             report_mouse_t currentReport = pointing_device_get_report();
 
@@ -401,7 +405,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [4] = LAYOUT_universal(
     _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_MY_BTN4 , _______  ,KC_MY_BTN5, _______  , _______  ,
-    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_MY_BTN1, KC_MO(3) ,KC_MY_BTN2, _______  , _______  ,
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_MY_BTN1, KC_MY_SCR ,KC_MY_BTN2, _______  , _______  ,
     _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
                   _______  , _______  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   )
