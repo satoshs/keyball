@@ -46,7 +46,7 @@ enum custom_keycodes
   KC_MY_BTN3,                      // Remap上では 0x5DB1
   KC_MY_BTN4,
   KC_MY_BTN5,
-  MO(3)
+  KC_MO(3)
 };
 
 
@@ -124,7 +124,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
   case KC_MY_BTN3:
   case KC_MY_BTN4:
   case KC_MY_BTN5:
-  case MO(3):
+  case KC_MO(3)
   {
     report_mouse_t currentReport = pointing_device_get_report();
 
@@ -266,7 +266,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [4] = LAYOUT_universal(
     _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_MY_BTN4 , _______  ,KC_MY_BTN5, _______  , _______  ,
-    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_MY_BTN1, MO(3)  ,KC_MY_BTN2, _______  , _______  ,
+    _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  ,KC_MY_BTN1, KC_MO(3) ,KC_MY_BTN2, _______  , _______  ,
     _______  , _______  , _______  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______  , _______  , _______  ,
                   _______  , _______  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   )
